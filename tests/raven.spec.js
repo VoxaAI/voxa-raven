@@ -67,8 +67,9 @@ describe('Raven plugin', () => {
   });
 
   it('should have the client available in the request object', () => {
-    const skill = new Voxa({ views: { } });
-    states.entry = request => request.raven.captureMessageAsync('Some message');
+    const skill = new Voxa({ views: { hi: { tell: 'hi!' } } });
+    states.entry = request => request.raven.captureMessageAsync('Some message')
+        .then(() => ({ reply: 'hi' }));
 
     _.map(states, (state, name) => {
       skill.onState(name, state);
