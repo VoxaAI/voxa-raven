@@ -43,7 +43,7 @@ function register(skill, ravenClient) {
       request.ravenErrorReported = true;
     }));
 
-  skill.onError((request, reply, error) => {
+  skill.onError((request, error) => {
     if (request.ravenErrorReported) {
       return null;
     }
