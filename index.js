@@ -26,6 +26,15 @@ function register(skill, ravenClient) {
     request.raven = client;
   });
 
+  skill.onSessionEnded((request) => {
+    if (request.request.reason === 'ERROR') {
+      return client.captureExceptionAsync(new Error(request.request.error.message))
+      .then((eventId) => {
+        debug('Captured exception and sent to Sentry successfully with eventId: %s', eventId);
+      });
+    }
+  });
+
   skill.onAfterStateChanged((request, reply, transition) => {
     debug('captureBreadcrumb', transition.to);
     client.captureBreadcrumb({
@@ -49,9 +58,9 @@ function register(skill, ravenClient) {
     }
 
     return ravenClient.captureExceptionAsync(error)
-      .then((eventId) => {
-        debug('Captured exception and sent to Sentry successfully with eventId: %s', eventId);
-      });
+    .then((eventId) => {
+      debug('Captured exception and sent to Sentry successfully with eventId: %s', eventId);
+    });
   });
 }
 

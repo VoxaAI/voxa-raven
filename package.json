@@ -1,6 +1,6 @@
 {
   "name": "voxa-raven",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Raven integration for voxa",
   "main": "index.js",
   "scripts": {
