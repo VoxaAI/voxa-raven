@@ -15,6 +15,17 @@ function register(skill, ravenClient) {
     client.mergeContext({
       extra: { request: _.cloneDeep(request) },
     });
+
+    if (process.env.LAMBDA_TASK_ROOT) {
+      client.mergeContext({
+        tags: {
+          Lambda: process.env.AWS_LAMBDA_FUNCTION_NAME,
+          Version: process.env.AWS_LAMBDA_FUNCTION_VERSION,
+          LogStream: process.env.AWS_LAMBDA_LOG_STREAM_NAME,
+        },
+      });
+    }
+
     client.captureBreadcrumb({
       message: 'Start state',
       category: 'stateFlow',
@@ -47,10 +58,10 @@ function register(skill, ravenClient) {
   });
 
   skill.onStateMachineError((request, reply, error) => client.captureExceptionAsync(error)
-    .then((eventId) => {
-      debug('Captured exception and sent to Sentry successfully with eventId: %s', eventId);
-      request.ravenErrorReported = true;
-    }));
+  .then((eventId) => {
+    debug('Captured exception and sent to Sentry successfully with eventId: %s', eventId);
+    request.ravenErrorReported = true;
+  }));
 
   skill.onError((request, error) => {
     if (request.ravenErrorReported) {
