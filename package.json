@@ -1,6 +1,6 @@
 {
   "name": "voxa-raven",
-  "version": "0.0.5",
+  "version": "1.0.0-alpha",
   "description": "Raven integration for voxa",
   "main": "index.js",
   "scripts": {
@@ -37,8 +37,10 @@
     "lodash": "^4.17.4",
     "mocha": "^3.2.0",
     "mocha-jenkins-reporter": "^0.3.7",
-    "raven": "^1.2.1",
-    "simple-mock": "^0.7.3",
-    "voxa": "^2.0.0"
+    "simple-mock": "^0.7.3"
+  },
+  "peerDependencies": {
+    "raven": "^2.4.0",
+    "voxa": "3.0.0-alpha"
   }
 }

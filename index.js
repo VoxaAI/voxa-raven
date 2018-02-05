@@ -57,23 +57,10 @@ function register(skill, ravenClient) {
     });
   });
 
-  skill.onStateMachineError((request, reply, error) => client.captureExceptionAsync(error)
-  .then((eventId) => {
-    debug('Captured exception and sent to Sentry successfully with eventId: %s', eventId);
-    request.ravenErrorReported = true;
-  }));
-
-  skill.onError((request, error) => {
-    if (request.ravenErrorReported) {
-      return null;
-    }
-
-    return ravenClient.captureExceptionAsync(error)
+  skill.onError((request, error) => ravenClient.captureExceptionAsync(error)
     .then((eventId) => {
       debug('Captured exception and sent to Sentry successfully with eventId: %s', eventId);
-    });
-  });
+    }));
 }
 
 module.exports = register;
-
